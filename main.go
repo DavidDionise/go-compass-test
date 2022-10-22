@@ -30,7 +30,7 @@ func main() {
 		for {
 			command := GET_ANGLE
 			process(command)
-			time.Sleep(1 * time.Second)
+			time.Sleep(200 * time.Millisecond)
 		}
 	} else {
 		command, err := generateCommand(os.Args[1])
@@ -59,8 +59,15 @@ func process(command []byte) {
 		log.Fatal("error writing\n", err)
 	}
 
-	// fmt.Println(buf)
-	printBuffer(buf)
+	switch os.Args[1] {
+	case "GET_ANGLE_CONTINUED", "GET_ANGLE":
+		printDegree(buf)
+	default:
+		// fmt.Println(buf)
+		printBuffer(buf)
+	}
+
+	printDegree(buf)
 }
 
 func printBuffer(buf []byte) {
@@ -73,6 +80,13 @@ func printBuffer(buf []byte) {
 		}
 	}
 	fmt.Println(" ]")
+}
+
+func printDegree(buf []byte) {
+	highBits := buf[1]
+	lowBits := buf[2]
+
+	fmt.Println(hexToInt([2]byte{highBits, lowBits}) / 10)
 }
 
 func generateCommand(arg string) ([]byte, error) {
