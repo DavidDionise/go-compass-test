@@ -1,15 +1,5 @@
 package main
 
-import (
-	"fmt"
-	"strconv"
-)
-
-func hexToInt(bytes [2]byte) (int64, error) {
-
-	return strconv.ParseInt(
-		fmt.Sprintf("%d", bytes[0]*16*16+bytes[1]),
-		16,
-		32,
-	)
+func hexToInt(bytes [2]byte) int {
+	return (int(bytes[0]) << 8) + int(bytes[1])
 }
